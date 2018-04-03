@@ -34,4 +34,4 @@ MIDIClient.list; // to check, which are there, you can query them
 // ~midiOut = MIDIOut.newByName("Focusrite USB MIDI", "Focusrite USB MIDI");
 ~midiOut = MIDIOut.newByName("LoopBe Internal MIDI", "LoopBe Internal MIDI");
 ~midiOut.latency = 0.45;
-~dirt.soundLibrary.addMIDI(\midi, ~midiOut);
+~dirt.soundLibrary.addMIDI(\midi, ~ midiOut);

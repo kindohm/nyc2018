@@ -1,0 +1,4 @@
+d1 $ s "midi*4" # midicmd "control" # midichan "16" # nudge "0.35" 
+    # ctlNum 1 # control "1 127" 
+
+    hush

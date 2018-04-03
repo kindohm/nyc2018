@@ -1,24 +1,35 @@
 bps (150/120)
 
+hush
+
 do
     let pat  = "{1       ~ ~ 1 ~ 1 ~ ~}%16"
         vpat = "{[0 1]/2 ~ ~ 1 ~ 1 ~ ~}%16"
         cpp  = "{1       ~ ~ ~ ~ ~ ~ ~}%16"
-    d1 $ 
+    d1 $ every 3 rev $ every 5 (rip 0.5 0.25) $ 
+        every 6 (# coarse "{8 4 16 12 24}%7") $
+        every 7 (# accelerate "-1 1") $
+        every 8 (|*| speed "{-1 0.5 0.8 1.5}%16") $
+        every 4 (off (0.125*3) (|*| speed "1.5 2")) $ 
+        whenmod 11 9 (slow 4 . striate' 24 0.2) $ degrade $ shift' 33 $
       stack [
+        shift' 101 $ brakk "ion3*8",
         gain pat # n (slow 280 $ run 70) # s "rebsy" # cut 877,
-        gain (pat) # s "rebrs" # cut 1011,
-        slow 2 $ gain cpp # s "rebcy" # cut 101,
-        gtfo $ whenmod 20 15 (gtfo) $ n "{0 0 1}%16" # s "rebch" # cut 200 # gain 0.8,
-        gtfo $ ((0.0625) <~) $ gain pat # s "rebtom"]
-
-        _rev1 $ gtfofx $ stdrev1
-    _rev2 $ gtfofx $ stdrev2
-    _delay $ gtfofx $ stddelay
-    _delayt $ gtfofx $ stddelayt
+        gain (pat) # s "rebbd" # cut 1011,
+        gain (pat) # s "mi" # n (slow 24 $ run 12) # cut "83310" # speed "1",
+        slow 2 $ gain cpp # s "rebcp" # cut 101,
+        whenmod 20 15 (gtfo) $ n "{0 0 1}%16" # s "rebch" # cut 200 # gain 0.8,
+        ((0.0625) <~) $ gain pat # s "rebtom"]
+    _rev1 $ stdrev1
+    _rev2 $ every 10 (# control "127") $ (# control "0") $ stdrev2
+    _delay $ stddelay
+    _delayt $ stddelayt
     _lpf $ gtfofxhigh $ stdlpf
-    _hpf $ gtfofx $ stdhpf
-    _flang $ gtfofx $ stdflang
-    _gross $ gtfofx $ stdgross
+    _hpf $ stdhpf
+    _flang $ stdflang
+    _gross $ shift $ stdgross
 
 hush
+hush
+
+_rev1 $ stdrev1

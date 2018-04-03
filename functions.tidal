@@ -59,9 +59,9 @@ let rip a b p = within (0.25, 0.75) (slow 2 . rev . stut 8 a b) p
     stddelay = whenmod 9 7 (# control (discretise (1/4) $ slow 3.89 $ choose [0,0,0,0,60,80,100,127])) $
                shift $ degradeBy 0.5 $ shift' 81 $ gain "1*8" # fxchan
                # ctlNum "3" # control "0"
-    stddelayt = degradeBy 0.5 $ shift' 81 $
+    stddelayt = degradeBy 0.25 $ shift' 81 $
                 gain "1*8" # fxchan
-                # ctlNum "4" # control (slow 290.228 $ choose [1,2,3,4])
+                # ctlNum "4" # control (slow 290.228 $ choose [1,2..64])
     stdlpf = shift $
              foldEvery [7,11] (# control (scale 80 127 $ slow 1.77 $ sine)) $
              degradeBy 0.5 $ shift' 101 $ gain 1 # fxchan
@@ -105,3 +105,4 @@ let rip a b p = within (0.25, 0.75) (slow 2 . rev . stut 8 a b) p
 
 
 -- test
+hush
