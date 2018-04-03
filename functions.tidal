@@ -1,0 +1,107 @@
+let rip a b p = within (0.25, 0.75) (slow 2 . rev . stut 8 a b) p
+    rip' a b c d e p = within (a, b) (slow 2 . rev . stut c d e) p
+    spike p = ((# delaytime (scale 0.001 0.3 $ slow 7.1 sine1)) . (# delayfeedback (scale 0.7 0.99 $ slow 6.71 sine1))) $ p
+    spike' p = (# delay "0.3") $ spike $ p
+    ghost'' a f p = superimpose (((a/2 + a*2) ~>) . f) $ superimpose (((a + a/2) ~>) . f) $ p
+    ghost' a p = ghost'' a ((|*| gain "0.7") . (|=| end "0.2") . (|*| speed "1.25")) p
+    ghost p = ghost' 0.125 p
+    jit start amount p = within (start, (start + 0.5)) (trunc (amount)) p
+    gtfo p = (const $ sound "~") p
+    gtfo' p = (const $ midinote "~") p
+    gtfom = gtfo'
+    gtfo2 = gtfo'
+    shift p = (1024 <~)  p
+    shift' x p = (x <~) p
+    choose xs = (xs !!) <$> (irand $ fromIntegral $ length xs)
+    one p = stut' 1 (0.125/2) (|*| gain "1") $ p
+    one' p = rarely (stut' 1 (0.125/2) (|*| gain "1")) $ shift' 1024 $ p
+    one'' p = sometimes (stut' 1 (0.125/2) (|*| gain "1")) $ shift' 1024 $ p
+    rep n p = stut' (n-1) (0.125*3) (|*| gain "1") $ p
+    rep' n p = stut' (n-1) (0.125/2*3) (|*| gain "1") $ p
+    rep'' n p = stut' (n-1) (0.125/4*3) (|*| gain "1") $ p
+    beginend bpat durpat = (begin bpat) # (end $ (+) <$> bpat <*> durpat)
+    mpent = [0, 3, 5, 7, 10, 12]
+    pent = [0, 2, 4, 7, 9, 12]
+    inverse 1 = 0
+    inverse 0 = 1
+    inverse 11 = 0
+    inverse 10 = 1
+    inv 1 = 0
+    inv 0 = 1
+    inv 11 = 0
+    inv 10 = 1
+    bpm x = bps (x/120)
+    brakk samps = ((|=| unit "c") . (|=| speed "8")) $ sound (samples samps (irand 30))
+    brakk4 samps = ((|=| unit "c") . (|=| speed "4")) $ sound (samples samps (irand 30))
+    move p = foldEvery [3,4] (0.25 <~) $ p
+    move'' p = foldEvery [2,3] (0.25 <~) $ p
+    move' p = foldEvery [3,4] (0.25 ~>) $ p
+    move''' p = foldEvery [2,3] (0.25 ~>) $ p
+    delays = [(1/512), (1/256), (1/128), (1/64), (1/32), (1/16), (1/8)]
+    randDelay p = ((|=| delay (scale 0.5 0.7 $ shift' 5001 $ rand)) . (|=| delaytime (shift' 5002 $ choose delays)) . (|=| delayfeedback (scale 0.5 0.9 $ shift' 5003 $ rand))) $ p
+    crumble = slow 2 $ sound "[k*16 ~]/2 ~" # n (run 32)
+    rando = randDelay
+    foldEVery = foldEvery
+    accelrate = accelerate
+    discretize = discretise
+    crushit p = (|=| crush (scale 3 8 $ slow 1.1 tri)) $ p
+    replicator text1 = [putStr (text1) | x <- replicate 500 text1]
+    flood text2 = sequence_(replicator text2)
+    replicator' n text1 = [putStr (text1) | x <- replicate n text1]
+    flood' n text2 = sequence_(replicator' n text2)
+    sbank bank pat = s (flip (++) <$> pat <*> bank)
+    fxchan = s "midi" # midicmd "control" # midichan "15" # nudge "0.35"
+    stdrev2 = shift $ degradeBy 0.5 $ shift' 17 $ gain "1*8" # fxchan
+              # ctlNum "1" # control (slow 1.389 $ choose [0,127])
+    stdrev1 = shift $ degradeBy 0.5 $ shift' 200 $
+              s "midi*8" # fxchan
+              # ctlNum "2" # control (slow 1.789 $ choose [0,0,0,127])
+    stddelay = whenmod 9 7 (# control (discretise (1/4) $ slow 3.89 $ choose [0,0,0,0,60,80,100,127])) $
+               shift $ degradeBy 0.5 $ shift' 81 $ gain "1*8" # fxchan
+               # ctlNum "3" # control "0"
+    stddelayt = degradeBy 0.5 $ shift' 81 $
+                gain "1*8" # fxchan
+                # ctlNum "4" # control (slow 290.228 $ choose [1,2,3,4])
+    stdlpf = shift $
+             foldEvery [7,11] (# control (scale 80 127 $ slow 1.77 $ sine)) $
+             degradeBy 0.5 $ shift' 101 $ gain 1 # fxchan
+             # ctlNum "5" # control 127
+    stdhpf = shift' 39 $ foldEvery [6,10] (# control (scale 0 45 $ slow 29.819 $ sine)) $
+             degradeBy 0.5 $ shift' 102 $ gain 1 # fxchan
+             # ctlNum "6" # control "0"
+    stdflang = shift' 391 $
+               degradeBy 0.5 $ gain "1*8" # fxchan
+               # ctlNum "8" # control (slow 29.819 $ choose [0,0,0,0,0,127])
+    stdgross = shift' 39 $
+              gain "1*2" # fxchan
+              # ctlNum "7" # control "0"
+    gtfofx p = (# control 0) $ p
+    gtfofxhigh p = (# control 127) $ p
+
+
+
+
+
+
+    domidi = midicmd "[noteOn, control]"
+    articulator = midichan 0
+    rebelion = midichan 1
+    itmesynth = midichan 2
+    itmevox = midichan 3
+    friend1 = midichan 4
+    friend2 = midichan 5
+    x = 100
+    y = 101
+    z = 102
+    prism = 103
+    tremdepth = 104
+    tremspeed = 105
+    ab = 106
+    revdecay = 107
+    timbre = 108
+    imgtime = 109
+    imgspeed = 110
+    fader = 111
+
+
+-- test

@@ -1,0 +1,16 @@
+bps (180/120)
+
+hush
+
+do
+  let bank = "[blog2]/16"
+  let m p = id $ p
+  d1 $ m $ stack [
+    gtfo $ (# gain "[1 0.8]") $ degradeBy 0.75 $ shift $ gain "0(3,8)" # sbank bank "pad" # n (shift $ irand 6) # cut 1,
+    gtfo $ foldEvery [2,3] (sometimes (0.125 ~>)) $ shift' 8 $ gain "~ 0/2" # sbank bank "sd" # n (shift' 2 $ irand 5) # cut 2,
+    gtfo $ move $ slow 2 $ gain "0(3,8) ~" # sbank bank "k" # n (shift' 3 $ irand 4) # cut 3,
+    sometimes (fast 2) $ shift' 2 $ degradeBy 0.5 $ shift' 2000 $ gain "0*8" # sbank bank "p" # n (shift' 4 $ irand 17) # cut 4,
+    gtfo $ gain "{[~ 0]*2 ~ ~ ~ ~ ~ ~}%2" # sbank bank "b" # n (shift' 5 $ irand 25) # cut 5,
+    gtfo $ degradeBy 0.5 $ shift' 7 $ gain "~ 0 ~ ~" # sbank bank "m" # cut 6 ] # gain 1
+
+hush

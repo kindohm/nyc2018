@@ -1,0 +1,24 @@
+bps (150/120)
+
+do
+    let pat  = "{1       ~ ~ 1 ~ 1 ~ ~}%16"
+        vpat = "{[0 1]/2 ~ ~ 1 ~ 1 ~ ~}%16"
+        cpp  = "{1       ~ ~ ~ ~ ~ ~ ~}%16"
+    d1 $ 
+      stack [
+        gain pat # n (slow 280 $ run 70) # s "rebsy" # cut 877,
+        gain (pat) # s "rebrs" # cut 1011,
+        slow 2 $ gain cpp # s "rebcy" # cut 101,
+        gtfo $ whenmod 20 15 (gtfo) $ n "{0 0 1}%16" # s "rebch" # cut 200 # gain 0.8,
+        gtfo $ ((0.0625) <~) $ gain pat # s "rebtom"]
+
+        _rev1 $ gtfofx $ stdrev1
+    _rev2 $ gtfofx $ stdrev2
+    _delay $ gtfofx $ stddelay
+    _delayt $ gtfofx $ stddelayt
+    _lpf $ gtfofxhigh $ stdlpf
+    _hpf $ gtfofx $ stdhpf
+    _flang $ gtfofx $ stdflang
+    _gross $ gtfofx $ stdgross
+
+hush
