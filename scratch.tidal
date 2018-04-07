@@ -2,3 +2,30 @@ d1 $ s "midi*4" # midicmd "control" # midichan "16" # nudge "0.35"
     # ctlNum 1 # control "1 127" 
 
     hush
+
+    bps (180/120)
+
+d1 $ rarely (stut' 1 (0.125*3) (|+| note "10")) $ shift $ degradeBy "{0.5 0.6 0.7 0.3 0.4}%2" $ shift $ sound "midi*16" 
+    # midicmd "noteOn" # midichan "6"
+    # midinote "{36 36 36 36 86}%16"
+
+d2 $ shift $ degrade $ shift $ sound "midi*16" 
+    # midicmd "control" # midichan "6"
+    # ctlNum "1" # control "{0 0 100 0 0 0 0 0 0 100}%16"
+
+
+
+
+d1 $ (|+| note "24") $ whenmod 6 2 (degradeBy 0.4) $ 
+    shift $ degradeBy 0.5 $ gain "{1 1 1 1 1 1 1 ~ ~ ~}%4" # sound "midi" 
+    # midicmd "noteOn" # midichan "6"
+    # note "{0 2 4 5 7 11 14 16 10}%16"
+
+
+d2 $ whenmod 6 2 (degradeBy 0.4) $ 
+    shift $ degradeBy 0.5 $ sound "midi*4" 
+    # midicmd "control" # midichan "6"
+    # ctlNum "1" # control (scale 20 80 $ slow 383 rand)
+    
+
+    hush

@@ -14,7 +14,7 @@ do
         whenmod 11 9 (slow 4 . striate' 24 0.2) $ degrade $ shift' 33 $
       stack [
         shift' 101 $ brakk "ion3*8",
-        gain pat # n (slow 280 $ run 70) # s "rebsy" # cut 877,
+        gain pat # n (discretise (1/4) $ irand 70) # s "rebsy" # cut 877,
         gain (pat) # s "rebbd" # cut 1011,
         gain (pat) # s "mi" # n (slow 24 $ run 12) # cut "83310" # speed "1",
         slow 2 $ gain cpp # s "rebcp" # cut 101,
