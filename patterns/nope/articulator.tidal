@@ -1,0 +1,26 @@
+bps (180/120)
+
+let pat  = "{1 0 1 1 0 1 0 1 1 1 0 ~ ~}%8"
+    patx = "{1 ~ 1 1 ~ 1 ~ 1 1 1 ~ ~ ~}%8"
+    domidi = midicmd "[noteOn, control]"
+    dis p = discretise (1/(13/2)) $ p
+
+-- oh what a simple sample synth
+d1 $ amp patx # s "artsy" # cut "817" # n (slow 416 $ run 48)
+
+d1 $ stack [
+    gain (inv <$> pat) # s "artbd" # n "1",
+    gain (inv <$> pat) # s "artch" # n "2",
+    whenmod 10 5 (slow 2) $ density 16 $ s "artch" # n "3" # gain "0.8",
+    gain (pat) # s "artcp",
+    amp patx # s "artsy" # cut "817" # n (slow 208 $ run 48) # gain "1.25" ]
+
+d1 $ stack [
+    gain (inv <$> pat) # s "artbd" # n "0",
+    gain (inv <$> pat) # s "artch" # n "0",
+    whenmod 10 5 (slow 2) $ density 16 $ s "artch" # n "1" # gain "0.9",
+    gain (pat) # s "artcp" # n "1",
+    amp patx # s "artsy" # cut "817" # n (slow 208 $ run 48) # gain "1.25" ]
+
+
+hush

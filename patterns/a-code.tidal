@@ -8,9 +8,9 @@ do
     stack [
       (# n "[1 0 2]/5") $ (|+| gain "[0.05 0.1 0.05]/5") $ rep' 8 $ gain pat # sound "alstab"
         # cut "1" # speed "0.25",
-      gtfo $ sound "~ alcp" # gain "1",
-      gtfo $ jux (iter 16) $
-        sound "revkit([5 3 7]/3,8)" # cut "100" # end "1" # gain "0.7" # speed "2"
+      sound "~ alcp" # gain "1",
+      jux (rev) $
+        sound "revkit([5 3 7 9]/4,16)" # cut "100" # end "1" # gain "0.7" # speed "2"
           # accelerate (choose [-1, 1])
     ]
 

@@ -1,0 +1,185 @@
+hush
+
+-- int
+bps(170/120)
+
+d3 $ stut' 2 (0.125*3) ((4 <~) .  (|*| gain "0.8") . (# pan rand) ) $ 
+    sometimes (jux (iter 4)) $ shift $ sometimes (# speed "[0.5 0.25]*3") $
+    (# cutoff (scale 100 3000 $ sine1)) $ slow 16 $ striate 128 $ sound (samples "dr:0" "[0 1]/8")
+    # resonance "0.1" # gain "1"
+    # hpf "100"
+
+d1 $ sound "legends:1*16" # cut "3"
+
+hush
+    
+
+-- blue-code
+let pat = "{1 1*2 ~ ~ ~ 1 ~ 1*2 1 ~ 1 1 ~ ~ [~ 1] ~ 1 [~ 1] ~ 1 ~}%8"
+
+bps (180/120)
+
+d1 $ 
+    stack [
+        rarely ((|=| s "cps1") . (|=| n (irand 10)) . (|=| speed (scale 0.8 1.2 $ slow 1.1 rand))) $
+            whenmod 8 4 (|+| n "1") $ gain pat # s "kbj" # cut 2 # n "[0 4]/9",
+        gain pat # sound "stab1" # cut 1 # n (irand 10) # begin 0.0001,
+        whenmod 10 5 (0.125 <~) $ s "ss" # shape 0.2,
+        sometimes (stut' 1 (0.0625) (|*| gain 0.95)) $ shift $ s "spike1*8"
+            # gain (scale 0.7 1 $ slow 1.3 rand) # pan (scale 0.3 0.7 $ slow 1.4 rand) ]
+
+
+-- (clutchIn 16) 
+
+d1 $ 
+    stack [
+        rarely ((|*| gain "1.1") . (|=| s "cpr") . (|=| n (slow 20 $ irand 10)) . (|=| speed (scale 0.8 1.2 $ slow 1.1 rand))) $
+            whenmod 8 4 (|+| n "0") $ (|*| gain "[1.05 1.1]/9") $ gain pat # s "[k fk]/9" # cut "2",
+        gain pat # sound "bj2"
+            # lpf 3000
+            # hpf 300
+            # cut "1"
+            # n (slow 12 $ choose[1,2,3]),
+        whenmod 10 5 (0.125 <~) $ s "uls" # gain "1.2" # speed "[1.5 0.8]/3" # shape "0.2",
+        sometimes (slow 2) $ shift $ s "wet:3*12"
+            # gain (scale 0.6 1 $ slow 1.3 rand)
+            # pan (scale 0.3 0.7 $ slow 1.4 rand)
+            # speed "2" ]
+
+-- --------------------
+
+-- a-code
+bps (140/120)
+
+
+let pat = "{1 ~ ~ 1 ~ ~ ~ ~}%2"
+
+d1 $ (|+| gain "0.1") $ foldEvery [3,4] (0.25 <~) $
+    stack [
+        (# n "[1 0 2]/5") $ (|+| gain "[0.05 0.1 0.05]/5") $ rep' 8 $ gain pat # sound "alstab"
+        # cut "111" # speed "0.25",
+        sound "~ alcp" # gain "1",
+        jux (rev) $
+        sound "revkit([5 3 7 9]/4,16)" # cut "100" # end "1" # gain "0.7" # speed "2"
+            # accelerate (choose [-1, 1])]
+
+hush
+
+d1 $ 
+    stack [
+      degradeBy 0.4 $
+        sound "revkit*16" # n (density 2.3 $ run 7) # gain "0.8",
+      (# n "[1 0 3]/5") $ (|+| gain "[0 -0.1 0]/5") $ rarely (stut' 2 (0.0625) (|*| gain "1")) $
+        rep' 8 $ gain pat # sound "alk" # cut "10",
+      (# n "[1 0 2]/5") $ (|+| gain "[0.05 0.15 0.05]/5") $ rep' 8 $ gain pat # sound "alstab"
+        # cut "111" # speed "<1 1 1 0.5>",
+      sound "~ alcp" # gain "1",
+      whenmod 14 7 (degrade) $ jux (iter 16) $
+        sound "als([5 3 7]/3,8)" # cut "100" # end "0.05" # gain "0.8" # speed "1"
+    ]
+
+
+
+-- -------
+
+-- dream
+
+d2 $ degradeBy 0.3 $ sound "dream*16" # cut "3" # pan (rand)
+
+d1 silence
+
+hush
+
+d2 silence
+
+
+-- ----------
+
+-- c-code
+
+bps (140/120)
+
+let struc = "{x ~ ~ ~ ~ ~ [x] ~ ~ [~ x] ~ ~}%8"
+
+d1 $ stut' 2 (0.125*5) ((|*| gain "0.9") . (# pan rand)) $ 
+    whenmod 5 3 (rev) $ slow "<4 8 24 16 12>" $ superimpose (0.5 <~) $ trunc 0.5 $
+    striate "32 16 128 64" $
+    rep' 3 $ struct struc $ sound "ccstab"
+        # n (slow 18 $ run 6)
+        # gain "1.2"
+        # speed "[0.5 0.75 0.5 1 0.25]/13"
+        # shape "0" # lpf "200"
+
+        hush
+
+d1 $ 
+    stack [
+        degradeBy 0.5 $ shift $ gain "1*16" # sound "[cckit1 cckit2]/10" # n (irand 10) |=| cut "-1",
+        rep' 3 $ struct struc $ sound "cck" # n (slow 18 $ run 6) |=| cut "2",
+        rep' 3 $ struct struc $ sound "ccstab" # n (slow 18 $ run 6) # gain "1"
+            |=| cut "1" # speed "[0.5 0.75 0.5 1]/13" # shape "0",
+        whenmod 15 11 (gtfo) $ sound "~ cccp" # gain "1.2" # shape "0.1",
+        struct "{~ x [~ x] [~ x/2] ~}%2" $ sound "ccs" # n "[0 1 2]/32" # speed "1.5"] # gain "1.25"
+
+-- --------------
+
+-- it me
+
+bps (160/120)
+
+
+let npat p = (|=| n "[0 1 0 2]/32") $ p
+    dis p = discretise (1/4) $ p
+
+d2 $
+    stack [
+        (# n (slow 160 $ run 40)) $ off (0.0625*3) (# pan "0.5") $ s "itmepad*2" # cut "388" # gain "1.1",
+        -- bd, don't be fooled  by the randcat
+        (|*| gain "0.95") $ 
+            npat $ randcat [off (0.0625) (|*| gain "0.9") $ gain "1", gain "1(3,8) 1(3,8)",      
+            (0.25 <~) $ gain "~ 1(3,8)", gain "1*2 1 ~ ~", gain "~ ~ ~ 1"] # s "itmebd" # cut "100",
+        -- cp
+        (# n (irand 20)) $ sometimesBy 0.25 (off (0.125*3) (|*| gain "1")) $ shift $ gain "~ 1.25"
+            # s "[itmecp1 itmecp2 itmecp1 itmecp3]/32" # cut "300",
+        -- tm
+        (|*| gain "1") $ npat $ slow (discretise (1/8) $ slow 8311 $ choose [1,(4/3),2,(8/3)] ) $
+            (# gain (scale 0.8 1 $ slow 382 rand)) $ s "itmetom*16",
+        -- vox
+        (# n (slow 320 $ run 80)) $
+            slow (dis $ shift' 101 $ choose [1,(4/3),2,(8/3),4,(12/3)] ) $
+            s "itmevox*16" # cut "338" ]
+
+-- -------
+
+-- patton
+
+d2 $ (# n (slow 160 $ run 40)) $ off (0.0625*3) (# pan "0.5") $ s "itmepad*2" # cut "388" # gain "1"
+
+d3 $ degradeBy 0.3 $ sound "pattonfull*32" # cut "3" # gain "1.2" # hpf "100"
+
+
+d3 silence
+
+
+
+-- -------
+
+-- reb
+
+bps (150/120)
+
+do
+    let pat  = "{1       ~ ~ 1 ~ 1 ~ ~}%16"
+        vpat = "{[0 1]/2 ~ ~ 1 ~ 1 ~ ~}%16"
+        cpp  = "{1       ~ ~ ~ ~ ~ ~ ~}%16"
+    d1 $ 
+      stack [
+        gain pat # n "2" # s "rebsy" # cut 877,
+        gain (pat) # s "rebsd" # cut 1011,
+        slow 2 $ gain cpp # s "rebcp" # cut 101,
+        gtfo $ whenmod 20 15 (gtfo) $ n "{0 0 1}%16" # s "rebch" # cut 200 # gain 0.8,
+        gtfo $ ((0.0625) <~) $ gain pat # s "rebtom"]
+
+
+
+hush

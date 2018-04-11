@@ -29,3 +29,10 @@ d2 $ whenmod 6 2 (degradeBy 0.4) $
     
 
     hush
+
+
+
+d1 $ stack [s "feel*4" # n 6 # cut 1 # nudge (scale 0 2 $ slow 8 sine) # pan 1,
+    s "peri*12" # n 3 # cut 2 # nudge (scale 0 3 $ slow 9 sine) # pan 0]
+
+    hush
